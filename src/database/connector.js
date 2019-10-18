@@ -6,7 +6,8 @@ const db = low(adapter);
 
 const defaultData = {
   todos: [], 
-  users: []
+  users: [],
+  books: [],
 }
 db.defaults(defaultData).write();
 
