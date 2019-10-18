@@ -3,15 +3,15 @@
 ### 스터디 진행 순서
 
 - [x] (1주차)서버의 구조 학습
-- [ ] (2주차)Restful API design, Json Response design
+- [x] (2주차)Restful API design, Json Response design
 - [ ] (3주차)Test Driven Development(ft. jest and supertest) 
 - [ ] (4주차)Deployment(Docker, AWS EB)
 
 ### 스터디 과제
 
-- [ ] (2주차 까지) User, Book 모델을 만들고 CRUD 메서드 만들기
+- [x] (2주차 까지) User, Book 모델을 만들고 CRUD 메서드 만들기
   - controllers, routes, service, models 사용!
-- [ ] (3주차 까지) 미공개
+- [ ] (3주차 까지) [JSON API](https://jsonapi.org/) 를 활용하여 Response를 만들어보기
 - [ ] (4주차 까지) 미공개
 
 ### 스터디 목표
@@ -61,4 +61,57 @@ src
  |- app.js: express 어플리케이션 생성
  |- index.js: 어플리케이션 호출 로직
 
+```
+
+
+##### 테스트를 해보자
+
+1. jest와 supertest를 이욯해서 요청-응답 테스트하기
+2. VSCode의 디버깅 툴을 사용하여 오류 발생시 BP(break point)를 걸어서 디버깅하기
+
+```
+$ npm install --save-dev jest supertest
+$ jest
+```
+
+아래의 코드를 .vscode/launch.json 에 붙여넣는다.
+출처 [https://github.com/microsoft/vscode-recipes/tree/master/debugging-jest-tests](https://github.com/microsoft/vscode-recipes/tree/master/debugging-jest-tests)
+```
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest All",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": ["--runInBand"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      }
+    }, {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Current File",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "${fileDirname}/${fileBasenameNoExtension}",
+        "--config",
+        "jest.config.js"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      }
+    }
+  ]
+}
 ```
