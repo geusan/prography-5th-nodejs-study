@@ -11,7 +11,7 @@ class BaseRepository {
   }
 
   find() {
-    return this.models.value();
+    return this.models.value() || [];
   }
 
   findById(id) {
