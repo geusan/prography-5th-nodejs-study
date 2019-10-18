@@ -66,52 +66,72 @@ src
 
 ##### 테스트를 해보자
 
-1. jest와 supertest를 이욯해서 요청-응답 테스트하기
-2. VSCode의 디버깅 툴을 사용하여 오류 발생시 BP(break point)를 걸어서 디버깅하기
+목표
+1. jest와 supertest를 이욯해서 요청-응답 테스트를 만들 수 있다.
+2. VSCode의 디버깅 툴을 사용하여 오류 발생시 BP(break point)를 걸어서 디버깅을 할 수 있다.
 
-```
-$ npm install --save-dev jest supertest
-$ jest
-```
+다음의 절차를 따른다.
 
-아래의 코드를 .vscode/launch.json 에 붙여넣는다.
-출처 [https://github.com/microsoft/vscode-recipes/tree/master/debugging-jest-tests](https://github.com/microsoft/vscode-recipes/tree/master/debugging-jest-tests)
-```
-{
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest All",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": ["--runInBand"],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+1. `npm install --save-dev jest supertest` jest와 supertest를 설치한다.
+2. `npx jest --init` 으로 jest.config.js 파일을 생성한다. `testMatch` 옵션의 주석을 해제한다.
+3. VSCode 에서 디버거 탭을 연다.
+4. 위쪽에 configuration을 고르는 곳에서 Add Configuration을 선택하면 `.vscode/launch.json` 파일이 생긴다. 아래의 코드를 붙여넣는다. 원본 출처 [https://github.com/microsoft/vscode-recipes/tree/master/debugging-jest-tests](https://github.com/microsoft/vscode-recipes/tree/master/debugging-jest-tests)
+  ```
+  {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Jest All",
+        "program": "${workspaceFolder}/node_modules/.bin/jest",
+        "args": ["--runInBand"],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "disableOptimisticBPs": true,
+        "windows": {
+          "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+        }
+      }, {
+        "type": "node",
+        "request": "launch",
+        "name": "Jest Current File",
+        "program": "${workspaceFolder}/node_modules/.bin/jest",
+        "args": [
+          "${fileDirname}/${fileBasenameNoExtension}",
+          "--config",
+          "jest.config.js"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "disableOptimisticBPs": true,
+        "windows": {
+          "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+        }
       }
-    }, {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest Current File",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": [
-        "${fileDirname}/${fileBasenameNoExtension}",
-        "--config",
-        "jest.config.js"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      }
-    }
-  ]
-}
-```
+    ]
+  }
+  ```
+
+5. `src/tests` 폴더에 `users.spec.ts` 라는 파일을 생성한다.
+6. 테스트코드를 작성한다.
+  ```
+    const request = require('supertest');
+    const app = require('../../app');
+
+    describe('test start!', () => {
+      test('GET /users', async () => {
+        const res = await request(app).get('/users');
+        expect(res.body).toStrictEqual({
+          data: '일치했으면 하는 데이터'
+        })
+      })
+    })
+  ```
+
+7. 디버깅 탭에서 configuration `Jest Current File` 을 선택하고 실행버튼(삼각형 모양)을 누른다. 테스트 진행된다.
+8. 실행되는 코드상에 Break point를 만들고 다시 실행해본다.
+9. 테스트에 대해 논의한다.
